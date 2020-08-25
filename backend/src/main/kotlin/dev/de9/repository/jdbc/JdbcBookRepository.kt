@@ -1,0 +1,95 @@
+package dev.de9.repository.jdbc
+
+import dev.de9.entity.BookEntity
+import dev.de9.repository.BookRepository
+import io.micronaut.context.annotation.Requires
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import java.time.LocalDate
+import javax.inject.Singleton
+
+@Singleton
+@Requires(beans = [NamedParameterJdbcTemplate::class])
+class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : BookRepository {
+    private companion object {
+        const val PERSIST_SQL =
+                "INSERT INTO book (title, date_of_publication) VALUES (:title, :date_of_publication);"
+        const val FIND_BY_ID_SQL =
+                "SELECT * FROM book WHERE id = :id;"
+        const val FIND_ALL_SQL =
+                "SELECT * FROM book;"
+        const val FIND_BY_TITLE_LIKE_SQL =
+                "SELECT * FROM book WHERE title LIKE :title;"
+        const val UPDATE_TITLE_SQL =
+                "UPDATE book SET title = :title WHERE id = :id;"
+        const val UPDATE_DATE_OF_PUBLICATION_SQL =
+                "UPDATE book SET date_of_publication = :date_of_publication WHERE id = :id;"
+        const val DELETE_SQL =
+                "DELETE FROM book WHERE id = :id;"
+    }
+
+    override fun persist(book: BookEntity): Int {
+        val params = mapOf(
+                "title" to book.title,
+                "date_of_publication" to book.dateOfPublication
+        )
+
+        return jdbcTemplate.update(PERSIST_SQL, params)
+    }
+
+    override fun findById(id: Long): BookEntity? {
+        val params = mapOf("id" to id)
+
+        return jdbcTemplate.query(FIND_BY_ID_SQL, params) { rs, _ ->
+            BookEntity(
+                    id = rs.getLong("id"),
+                    title = rs.getString("title"),
+                    dateOfPublication = rs.getDate("date_of_publication").toLocalDate()
+            )
+        }.singleOrNull()
+    }
+
+    override fun findAll(): List<BookEntity> {
+        return jdbcTemplate.query(FIND_ALL_SQL) { rs, _ ->
+            BookEntity(
+                    id = rs.getLong("id"),
+                    title = rs.getString("title"),
+                    dateOfPublication = rs.getDate("date_of_publication").toLocalDate()
+            )
+        }
+    }
+
+    override fun findByTitleLike(title: String): List<BookEntity> {
+        val params = mapOf("title" to title)
+
+        return jdbcTemplate.query(FIND_BY_TITLE_LIKE_SQL, params) { rs, _ ->
+            BookEntity(
+                    id = rs.getLong("id"),
+                    title = rs.getString("title"),
+                    dateOfPublication = rs.getDate("date_of_publication").toLocalDate()
+            )
+        }
+    }
+
+    override fun updateTitle(id: Long, title: String): Int {
+        val params = mapOf(
+                "id" to id,
+                "title" to title
+        )
+
+        return jdbcTemplate.update(UPDATE_TITLE_SQL, params)
+    }
+
+    override fun updateDateOfPublication(id: Long, dateOfPublication: LocalDate): Int {
+        val params = mapOf(
+                "id" to id,
+                "date_of_publication" to dateOfPublication
+        )
+
+        return jdbcTemplate.update(UPDATE_DATE_OF_PUBLICATION_SQL, params)
+    }
+
+    override fun delete(id: Long): Int {
+        val sqlParameterMap = mapOf("id" to id)
+        return jdbcTemplate.update(DELETE_SQL, sqlParameterMap)
+    }
+}
