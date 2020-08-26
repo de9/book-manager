@@ -15,6 +15,6 @@ CREATE TABLE book_author
 (
     book_id   VARCHAR,
     author_id VARCHAR,
-    CONSTRAINT fk__book_author__book_id FOREIGN KEY (book_id) REFERENCES book (id),
-    CONSTRAINT fk__book_author__author_id FOREIGN KEY (author_id) REFERENCES author (id)
+    CONSTRAINT fk__book_author__book_id FOREIGN KEY (book_id) REFERENCES book (id) ON DELETE CASCADE,
+    CONSTRAINT fk__book_author__author_id FOREIGN KEY (author_id) REFERENCES author (id)  ON DELETE CASCADE
 );
