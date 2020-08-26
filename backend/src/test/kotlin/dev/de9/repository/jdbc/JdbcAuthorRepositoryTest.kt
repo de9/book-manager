@@ -21,24 +21,24 @@ class JdbcAuthorRepositoryTest(
 
     "author repository" - {
         "can find author by ID" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             val findResult = repository.findById(2)
 
             findResult shouldBe AuthorEntity(2, "test name2")
         }
 
         "can NOT find author by NOT exist ID" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             val findResult = repository.findById(3)
 
             findResult shouldBe null
         }
 
         "can find all authors" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             val findResults = repository.findAll()
 
             findResults.shouldContainAll(
@@ -48,8 +48,8 @@ class JdbcAuthorRepositoryTest(
         }
 
         "can find authors by name" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             val findResults = repository.findByNameLike("%name1")
 
             findResults.shouldContainAll(
@@ -58,16 +58,16 @@ class JdbcAuthorRepositoryTest(
         }
 
         "can NOT find authors by NOT exist name" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             val findResults = repository.findByNameLike("NOT exist")
 
             findResults.shouldBeEmpty()
         }
 
         "can update name" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             repository.updateName(1, "updated name")
             val findResults = repository.findAll()
 
@@ -78,8 +78,8 @@ class JdbcAuthorRepositoryTest(
         }
 
         "can NOT update name by NOT exist id" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             repository.updateName(3, "updated name")
             val findResults = repository.findAll()
 
@@ -90,8 +90,8 @@ class JdbcAuthorRepositoryTest(
         }
 
         "can delete author" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             repository.delete(1)
             val findResults = repository.findAll()
 
@@ -101,8 +101,8 @@ class JdbcAuthorRepositoryTest(
         }
 
         "can NOT delete author by NOT exist id" - {
-            repository.persist(AuthorEntity(0, "test name1"))
-            repository.persist(AuthorEntity(0, "test name2"))
+            repository.add(AuthorEntity(0, "test name1"))
+            repository.add(AuthorEntity(0, "test name2"))
             repository.delete(3)
             val findResults = repository.findAll()
 

@@ -11,7 +11,7 @@ interface AuthorRepository {
      * @param author 著者
      * @return 追加した数
      */
-    fun persist(author: AuthorEntity): Int
+    fun add(author: AuthorEntity): Int
 
     /**
      * 著者IDを指定して著者を取得する。

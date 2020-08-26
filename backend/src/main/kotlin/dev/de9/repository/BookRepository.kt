@@ -12,7 +12,7 @@ interface BookRepository {
      * @param book 書籍
      * @return 追加した数
      */
-    fun persist(book: BookEntity): Int
+    fun add(book: BookEntity): Int
 
     /**
      * 書籍IDを指定して書籍を取得する。

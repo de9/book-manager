@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : BookRepository {
     private companion object {
-        const val PERSIST_SQL =
+        const val ADD_SQL =
                 "INSERT INTO book (title, date_of_publication) VALUES (:title, :date_of_publication);"
         const val FIND_BY_ID_SQL =
                 "SELECT * FROM book WHERE id = :id;"
@@ -27,13 +27,13 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
                 "DELETE FROM book WHERE id = :id;"
     }
 
-    override fun persist(book: BookEntity): Int {
+    override fun add(book: BookEntity): Int {
         val params = mapOf(
                 "title" to book.title,
                 "date_of_publication" to book.dateOfPublication
         )
 
-        return jdbcTemplate.update(PERSIST_SQL, params)
+        return jdbcTemplate.update(ADD_SQL, params)
     }
 
     override fun findById(id: Long): BookEntity? {

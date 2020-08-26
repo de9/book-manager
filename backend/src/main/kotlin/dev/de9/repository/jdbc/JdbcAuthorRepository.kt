@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthorRepository {
     private companion object {
-        const val PERSIST_SQL =
+        const val ADD_SQL =
                 "INSERT INTO author (name) VALUES (:name);"
         const val FIND_BY_ID_SQL =
                 "SELECT * FROM author WHERE id = :id;"
@@ -24,10 +24,10 @@ class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
                 "DELETE FROM author WHERE id = :id;"
     }
 
-    override fun persist(author: AuthorEntity): Int {
+    override fun add(author: AuthorEntity): Int {
         val params = mapOf("name" to author.name)
 
-        return jdbcTemplate.update(PERSIST_SQL, params)
+        return jdbcTemplate.update(ADD_SQL, params)
     }
 
     override fun findById(id: Long): AuthorEntity? {
