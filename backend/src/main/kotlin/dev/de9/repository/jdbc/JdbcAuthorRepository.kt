@@ -6,6 +6,9 @@ import io.micronaut.context.annotation.Requires
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import javax.inject.Singleton
 
+/**
+ * 著者を扱うリポジトリのH2-JDBC実装
+ */
 @Singleton
 @Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthorRepository {

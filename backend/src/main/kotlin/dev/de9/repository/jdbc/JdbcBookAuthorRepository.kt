@@ -8,6 +8,9 @@ import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import javax.inject.Singleton
 
+/**
+ * 書籍と著者の関係を扱うリポジトリのH2-JDBC実装
+ */
 @Singleton
 @Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcBookAuthorRepository(
