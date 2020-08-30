@@ -4,6 +4,8 @@ import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
 import dev.de9.repository.jdbc.JdbcBookRepository
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.collections.shouldContainExactly
@@ -11,10 +13,7 @@ import io.kotest.matchers.shouldBe
 import io.micronaut.test.annotation.MicronautTest
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.kotest.MicronautKotestExtension.getMock
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyOrder
+import io.mockk.*
 import java.time.LocalDate
 
 /**
@@ -82,20 +81,101 @@ class BookServiceImplTest(
 
         "'updateTitle' method can call repository" - {
             val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
 
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns
+                    BookEntity(1, "title", LocalDate.of(2010, 1, 1))
             every { mock.updateTitle(any(), any()) } returns 1
 
             service.updateTitle(1, "title") shouldBe 1
-            verify { mock.updateTitle(1, "title") }
+            verifyOrder {
+                mock.findById(1)
+                mock.updateTitle(1, "title")
+            }
+        }
+
+        "'updateTitle' method returns 0 if resource not found" - {
+            val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
+
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns null
+            every { mock.updateTitle(any(), any()) } returns 1
+
+            service.updateTitle(1, "title") shouldBe 0
+            verify { mock.findById(1) }
+            verify(inverse = true) { mock.updateTitle(any(), any()) }
+        }
+
+        "'updateTitle' method returns -1 if book was already published" - {
+            val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
+
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns
+                    BookEntity(1, "title", LocalDate.of(1990, 1, 1))
+
+            service.updateTitle(1, "title") shouldBe -1
+            verify { mock.findById(1) }
+            verify(inverse = true) { mock.updateTitle(any(), any()) }
         }
 
         "'updateDateOfPublication' method can call repository" - {
             val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
 
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns
+                    BookEntity(1, "title", LocalDate.of(2010, 1, 1))
             every { mock.updateDateOfPublication(any(), any()) } returns 1
 
-            service.updateDateOfPublication(2, LocalDate.of(2010, 1, 1)) shouldBe 1
-            verify { mock.updateDateOfPublication(2, LocalDate.of(2010, 1, 1)) }
+            service.updateDateOfPublication(1, LocalDate.of(2020, 1, 1)) shouldBe 1
+            unmockkStatic(LocalDate::class)
+            verify {
+                mock.findById(1)
+                mock.updateDateOfPublication(1, LocalDate.of(2020, 1, 1))
+            }
+        }
+
+        "'updateDateOfPublication' method returns 0 if resource not found" - {
+            val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
+
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns null
+
+            service.updateDateOfPublication(1, LocalDate.of(2010, 1, 1)) shouldBe 0
+            verify { mock.findById(1) }
+            verify(inverse = true) { mock.updateDateOfPublication(any(), any()) }
+        }
+
+        "'updateDateOfPublication' method returns -1 if book was already published" - {
+            val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
+
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns
+                    BookEntity(1, "title", LocalDate.of(1990, 1, 1))
+
+            service.updateDateOfPublication(1, LocalDate.of(2010, 1, 1)) shouldBe -1
+            verify { mock.findById(1) }
+            verify(inverse = true) { mock.updateDateOfPublication(any(), any()) }
+        }
+
+        "'updateDateOfPublication' method returns -2 if it specify a past date" - {
+            val mock = getMock(bookRepository)
+            mockkStatic(LocalDate::class)
+
+            every { LocalDate.now() } returns LocalDate.of(2000, 1, 1)
+            every { mock.findById(any()) } returns
+                    BookEntity(1, "title", LocalDate.of(2010, 1, 1))
+
+            service.updateDateOfPublication(2, LocalDate.of(1990, 1, 1)) shouldBe -2
+            verify(inverse = true) {
+                mock.findById(any())
+                mock.updateDateOfPublication(any(), any())
+            }
         }
 
         "'delete' method can call repository" - {
@@ -110,4 +190,8 @@ class BookServiceImplTest(
 }) {
     @MockBean(JdbcBookRepository::class)
     fun bookRepository(): BookRepository = mockk()
+
+    override fun afterTest(testCase: TestCase, result: TestResult) {
+        unmockkStatic(LocalDate::class)
+    }
 }
