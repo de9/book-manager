@@ -3,7 +3,7 @@ micronaut:
     name: backend
 datasources:
   default:
-    url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE;INIT=runscript from 'classpath:/schema.sql'
+    url: jdbc:h2:mem:devDb;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE;INIT=runscript from 'classpath:/schema.sql'
     driverClassName: org.h2.Driver
     username: sa
     password: ''
