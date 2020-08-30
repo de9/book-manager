@@ -117,10 +117,20 @@ class BooksControllerTest(
             verify { mock.updateTitle(1, "title") }
         }
 
-        "'putTitle' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
+        "'putTitle' entrypoint returns HTTP NOT FOUND if book not found" - {
             val mock = getMock(bookService)
 
             every { mock.updateTitle(any(), any()) } returns 0
+
+            val response = client.putTitle(2, "title")
+            response.status shouldBe HttpStatus.NOT_FOUND
+            verify { mock.updateTitle(2, "title") }
+        }
+
+        "'putTitle' entrypoint returns HTTP BAD REQUEST if book is already published" - {
+            val mock = getMock(bookService)
+
+            every { mock.updateTitle(any(), any()) } returns -1
 
             val response = try {
                 client.putTitle(2, "title")
@@ -128,6 +138,7 @@ class BooksControllerTest(
                 e.response
             }
             response.status shouldBe HttpStatus.BAD_REQUEST
+            response.reason() shouldBe BooksController.ALREADY_PUBLISHED_REASON
             verify { mock.updateTitle(2, "title") }
         }
 
@@ -140,10 +151,20 @@ class BooksControllerTest(
             verify { mock.updateDateOfPublication(1, LocalDate.of(2010, 1, 1)) }
         }
 
-        "'putDateOfPublication' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
+        "'putDateOfPublication' entrypoint returns HTTP NOT FOUND if book not found" - {
             val mock = getMock(bookService)
 
             every { mock.updateDateOfPublication(any(), any()) } returns 0
+
+            val response = client.putDateOfPublication(2, LocalDate.of(2020, 2, 2))
+            response.status shouldBe HttpStatus.NOT_FOUND
+            verify { mock.updateDateOfPublication(2, LocalDate.of(2020, 2, 2)) }
+        }
+
+        "'putDateOfPublication' entrypoint returns HTTP BAD REQUEST if book is already published" - {
+            val mock = getMock(bookService)
+
+            every { mock.updateDateOfPublication(any(), any()) } returns -1
 
             val response = try {
                 client.putDateOfPublication(2, LocalDate.of(2020, 2, 2))
@@ -151,6 +172,22 @@ class BooksControllerTest(
                 e.response
             }
             response.status shouldBe HttpStatus.BAD_REQUEST
+            response.reason() shouldBe BooksController.ALREADY_PUBLISHED_REASON
+            verify { mock.updateDateOfPublication(2, LocalDate.of(2020, 2, 2)) }
+        }
+
+        "'putDateOfPublication' entrypoint returns HTTP BAD REQUEST if specify past date" - {
+            val mock = getMock(bookService)
+
+            every { mock.updateDateOfPublication(any(), any()) } returns -2
+
+            val response = try {
+                client.putDateOfPublication(2, LocalDate.of(2020, 2, 2))
+            } catch (e: HttpClientResponseException) {
+                e.response
+            }
+            response.status shouldBe HttpStatus.BAD_REQUEST
+            response.reason() shouldBe BooksController.SPECIFY_PAST_DATE_REASON
             verify { mock.updateDateOfPublication(2, LocalDate.of(2020, 2, 2)) }
         }
 
@@ -163,17 +200,13 @@ class BooksControllerTest(
             verify { mock.add(1, 2) }
         }
 
-        "'putBookAuthor' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
+        "'putBookAuthor' entrypoint returns HTTP NOT FOUND on FAILURE" - {
             val mock = getMock(bookAuthorService)
 
             every { mock.add(any(), any()) } returns 0
 
-            val response = try {
-                client.putBookAuthor(3, 4)
-            } catch (e: HttpClientResponseException) {
-                e.response
-            }
-            response.status shouldBe HttpStatus.BAD_REQUEST
+            val response = client.putBookAuthor(3, 4)
+            response.status shouldBe HttpStatus.NOT_FOUND
             verify { mock.add(3, 4) }
         }
 
@@ -186,17 +219,13 @@ class BooksControllerTest(
             verify { mock.delete(1) }
         }
 
-        "'deleteBook' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
+        "'deleteBook' entrypoint returns HTTP NOT FOUND on FAILURE" - {
             val mock = getMock(bookService)
 
             every { mock.delete(any()) } returns 0
 
-            val response = try {
-                client.deleteBook(2)
-            } catch (e: HttpClientResponseException) {
-                e.response
-            }
-            response.status shouldBe HttpStatus.BAD_REQUEST
+            val response = client.deleteBook(2)
+            response.status shouldBe HttpStatus.NOT_FOUND
             verify { mock.delete(2) }
         }
 
@@ -209,17 +238,13 @@ class BooksControllerTest(
             verify { mock.delete(1, 2) }
         }
 
-        "'deleteBookAuthor' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
+        "'deleteBookAuthor' entrypoint returns HTTP NOT FOUND on FAILURE" - {
             val mock = getMock(bookAuthorService)
 
             every { mock.delete(any(), any()) } returns 0
 
-            val response = try {
-                client.deleteBookAuthor(3, 4)
-            } catch (e: HttpClientResponseException) {
-                e.response
-            }
-            response.status shouldBe HttpStatus.BAD_REQUEST
+            val response = client.deleteBookAuthor(3, 4)
+            response.status shouldBe HttpStatus.NOT_FOUND
             verify { mock.delete(3, 4) }
         }
     }

@@ -6,6 +6,7 @@ import dev.de9.operation.BooksOperation
 import dev.de9.service.BookAuthorService
 import dev.de9.service.BookService
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
@@ -19,6 +20,13 @@ class BooksController(
         private val bookService: BookService,
         private val bookAuthorService: BookAuthorService
 ) : BooksOperation {
+
+    companion object {
+        /** 出版済みの書籍を指定した場合のエラーメッセージ */
+        const val ALREADY_PUBLISHED_REASON = "This book was already published."
+        /** 出版日に過去の日付を指定した場合のエラーメッセージ */
+        const val SPECIFY_PAST_DATE_REASON = "Date of publication is not allowed to be past date."
+    }
 
     override fun postNewBook(book: BookEntity): HttpResponse<*> {
         val addCount = bookService.add(book)
@@ -40,28 +48,35 @@ class BooksController(
 
     @Consumes(MediaType.TEXT_PLAIN)
     override fun putTitle(id: Long, title: String): HttpResponse<*> {
-        val updateCount = bookService.updateTitle(id, title)
-        return if (updateCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+        return when (bookService.updateTitle(id, title)) {
+            1 -> HttpResponse.ok<Any>()
+            -1 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
+            else -> HttpResponse.notFound<Any>()
+        }
     }
 
     @Consumes(MediaType.TEXT_PLAIN)
     override fun putDateOfPublication(id: Long, dateOfPublication: LocalDate): HttpResponse<*> {
-        val updateCount = bookService.updateDateOfPublication(id, dateOfPublication)
-        return if (updateCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+        return when (bookService.updateDateOfPublication(id, dateOfPublication)) {
+            1 -> HttpResponse.ok<Any>()
+            -1 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
+            -2 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)
+            else -> HttpResponse.notFound<Any>()
+        }
     }
 
     override fun putBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> {
         val addCount = bookAuthorService.add(bookId, authorId)
-        return if (addCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+        return if (addCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
     }
 
     override fun deleteBook(id: Long): HttpResponse<*> {
         val deleteCount = bookService.delete(id)
-        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
     }
 
     override fun deleteBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> {
         val deleteCount = bookAuthorService.delete(bookId, authorId)
-        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
     }
 }

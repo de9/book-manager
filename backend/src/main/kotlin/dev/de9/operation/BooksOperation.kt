@@ -4,7 +4,6 @@ import dev.de9.entity.AuthorEntity
 import dev.de9.entity.BookEntity
 import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.*
 import java.time.LocalDate
 
@@ -35,6 +34,7 @@ interface BooksOperation {
      * 書籍IDを指定して書籍を取得する。
      * @param id 書籍ID
      * @return 書籍
+     *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
      */
     @Get(uri = "/{id}")
     fun getBookById(@PathVariable id: Long): HttpResponse<BookEntity>
@@ -53,6 +53,8 @@ interface BooksOperation {
      * @param id 書籍ID
      * @param title タイトル
      * @return 更新した数
+     *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
+     *  - HTTP_BAD_REQUEST: 更新できない書籍を指定した。
      */
     @Put(uri = "/{id}/title")
     fun putTitle(@PathVariable id: Long, @Body title: String): HttpResponse<*>
@@ -63,6 +65,8 @@ interface BooksOperation {
      * @param id 書籍ID
      * @param dateOfPublication 出版日
      * @return 更新した数
+     *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
+     *  - HTTP_BAD_REQUEST: 更新できない書籍を指定した。
      */
     @Put(uri = "/{id}/date-of-publication")
     fun putDateOfPublication(
@@ -75,6 +79,7 @@ interface BooksOperation {
      * @param bookId 書籍ID
      * @param authorId 著者ID
      * @return 追加した数
+     *  - HTTP_NOT_FOUND: 指定の書籍または著者が存在しなかった。
      */
     @Put(uri = "/{bookId}/authors/{authorId}")
     fun putBookAuthor(@PathVariable bookId: Long, @PathVariable authorId: Long): HttpResponse<*>
@@ -83,6 +88,7 @@ interface BooksOperation {
      * 指定した書籍を削除する。
      * @param id 書籍ID
      * @return 削除した数
+     *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
      */
     @Delete(uri = "/{id}")
     fun deleteBook(@PathVariable id: Long): HttpResponse<*>
@@ -92,6 +98,7 @@ interface BooksOperation {
      * @param bookId 書籍ID
      * @param authorId 著者ID
      * @return 削除した数
+     *  - HTTP_NOT_FOUND: 指定の書籍または著者が存在しなかった。
      */
     @Delete(uri = "/{bookId}/authors/{authorId}")
     fun deleteBookAuthor(@PathVariable bookId: Long, @PathVariable authorId: Long): HttpResponse<*>
