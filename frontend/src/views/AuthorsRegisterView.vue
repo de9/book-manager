@@ -2,7 +2,7 @@
   <div>
     <p>
       <label>
-        氏名
+        氏名【必須】
         <input type="text" placeholder="著者氏名を入力" v-model="name">
       </label>
     </p>

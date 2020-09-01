@@ -8,7 +8,7 @@
     </p>
     <p>
       <label>
-        出版日
+        出版日【必須】
         <input type="date" placeholder="書籍出版日を入力" v-model="dateOfPublication">
       </label>
     </p>
@@ -38,7 +38,7 @@ export default {
     postBooks() {
       this.$axios.post('/books', {id: 0, title: this.title, dateOfPublication: this.dateOfPublication})
         .then(() => {
-          alert(this.title + 'を追加しました。')
+          alert((!this.title ? '（タイトル未定）' : this.title) + 'を追加しました。')
           this.title = null
           this.dateOfPublication = null
         }).catch(err => {
