@@ -10,7 +10,7 @@ data class BookEntity(
         /** 書籍ID */
         val id: Long,
         /** タイトル */
-        val title: String,
+        val title: String?,
         /** 出版日 */
         @JsonFormat(pattern = "yyyy-MM-dd")
         val dateOfPublication: LocalDate

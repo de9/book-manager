@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     disabled() {
-      return !this.title || !this.dateOfPublication
+      return !this.dateOfPublication
     }
   },
   methods: {
