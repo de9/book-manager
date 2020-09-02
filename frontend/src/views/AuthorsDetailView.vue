@@ -8,6 +8,11 @@
         <button v-on:click="putName">更新</button>
       </label>
     </p>
+    <p>
+      <label>
+        <button style="background-color: #f37b00" v-on:click="deleteAuthor">著者を削除</button>
+      </label>
+    </p>
     <h3>著書リスト</h3>
     <table>
       <thead>
@@ -78,6 +83,18 @@ export default {
         }).catch(err => {
           alert('変更に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
         })
+    },
+    deleteAuthor() {
+      let select = confirm('この著者を削除しますか？')
+      if (select) {
+        this.$axios.delete(this.detailUrl)
+          .then(() => {
+            alert('削除しました。')
+            this.$router.push({ name: 'AuthorsView' })
+          }).catch(err => {
+            alert('削除に失敗しました。:' + err.response.status + err.response.statusText)
+          })
+      }
     }
   }
 }
