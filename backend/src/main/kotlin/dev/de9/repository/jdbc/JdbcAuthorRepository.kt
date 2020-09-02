@@ -21,7 +21,7 @@ class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
                 "SELECT * FROM author;"
         const val FIND_BY_NAME_LIKE_SQL =
                 "SELECT * FROM author WHERE name LIKE :name;"
-        const val UPDATE_NAME_SQL =
+        const val UPDATE_SQL =
                 "UPDATE author SET name = :name WHERE id = :id;"
         const val DELETE_SQL =
                 "DELETE FROM author WHERE id = :id;"
@@ -64,13 +64,13 @@ class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
         }
     }
 
-    override fun updateName(id: Long, name: String): Int {
+    override fun update(author: AuthorEntity): Int {
         val params = mapOf(
-                "id" to id,
-                "name" to name
+                "id" to author.id,
+                "name" to author.name
         )
 
-        return jdbcTemplate.update(UPDATE_NAME_SQL, params)
+        return jdbcTemplate.update(UPDATE_SQL, params)
     }
 
     override fun delete(id: Long): Int {

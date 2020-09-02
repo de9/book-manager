@@ -26,8 +26,8 @@ class AuthorServiceImpl(private val repository: AuthorRepository) : AuthorServic
         }
     }
 
-    override fun updateName(id: Long, name: String): Int {
-        return repository.updateName(id, name)
+    override fun update(author: AuthorEntity): Int {
+        return repository.update(author)
     }
 
     override fun delete(id: Long): Int {

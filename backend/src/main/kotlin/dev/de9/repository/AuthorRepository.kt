@@ -34,12 +34,11 @@ interface AuthorRepository {
     fun findByNameLike(name: String): List<AuthorEntity>
 
     /**
-     * 指定した著者の氏名を更新する。
-     * @param id 著者ID
-     * @param name 氏名
+     * 指定した著者を更新する。
+     * @param author 著者
      * @return 更新した数
      */
-    fun updateName(id: Long, name: String): Int
+    fun update(author: AuthorEntity): Int
 
     /**
      * 指定した著者を削除する。

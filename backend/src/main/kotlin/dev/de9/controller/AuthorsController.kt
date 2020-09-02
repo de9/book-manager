@@ -6,8 +6,6 @@ import dev.de9.operation.AuthorsOperation
 import dev.de9.service.AuthorService
 import dev.de9.service.BookAuthorService
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
 
 /**
@@ -37,9 +35,8 @@ class AuthorsController(
         return bookAuthorService.findBooksByAuthor(id)
     }
 
-    @Consumes(MediaType.TEXT_PLAIN)
-    override fun putName(id: Long, name: String): HttpResponse<*> {
-        val updateCount = authorService.updateName(id, name)
+    override fun putAuthor(id: Long, author: AuthorEntity): HttpResponse<*> {
+        val updateCount = authorService.update(author)
         return if (updateCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
     }
 

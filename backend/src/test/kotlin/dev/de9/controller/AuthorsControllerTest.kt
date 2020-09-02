@@ -108,23 +108,23 @@ class AuthorsControllerTest(
             verify { mock.findBooksByAuthor(1) }
         }
 
-        "'putName' entrypoint returns HTTP OK on SUCCESS" - {
+        "'putAuthor' entrypoint returns HTTP OK on SUCCESS" - {
             val mock = getMock(authorService)
 
-            every { mock.updateName(any(), any()) } returns 1
+            every { mock.update(any()) } returns 1
 
-            client.putName(1, "name").status shouldBe HttpStatus.OK
-            verify { mock.updateName(1, "name") }
+            client.putAuthor(1, AuthorEntity(1, "name")).status shouldBe HttpStatus.OK
+            verify { mock.update(AuthorEntity(1, "name")) }
         }
 
-        "'putName' entrypoint returns HTTP NOT FOUND if author not found" - {
+        "'putAuthor' entrypoint returns HTTP NOT FOUND if author not found" - {
             val mock = getMock(authorService)
 
-            every { mock.updateName(any(), any()) } returns 0
+            every { mock.update(any()) } returns 0
 
-            val response = client.putName(2, "name")
+            val response = client.putAuthor(2, AuthorEntity(2, "name"))
             response.status shouldBe HttpStatus.NOT_FOUND
-            verify { mock.updateName(2, "name") }
+            verify { mock.update(AuthorEntity(2, "name")) }
         }
 
         "'deleteAuthor' entrypoint returns HTTP OK on SUCCESS" - {

@@ -65,10 +65,10 @@ class JdbcAuthorRepositoryTest(
             findResults.shouldBeEmpty()
         }
 
-        "can update name" - {
+        "can update author" - {
             repository.add(AuthorEntity(0, "test name1"))
             repository.add(AuthorEntity(0, "test name2"))
-            repository.updateName(1, "updated name")
+            repository.update(AuthorEntity(1, "updated name"))
             val findResults = repository.findAll()
 
             findResults.shouldContainAll(
@@ -77,10 +77,10 @@ class JdbcAuthorRepositoryTest(
             )
         }
 
-        "can NOT update name by NOT exist id" - {
+        "can NOT update author by NOT exist id" - {
             repository.add(AuthorEntity(0, "test name1"))
             repository.add(AuthorEntity(0, "test name2"))
-            repository.updateName(3, "updated name")
+            repository.update(AuthorEntity(3, "updated name"))
             val findResults = repository.findAll()
 
             findResults.shouldContainAll(

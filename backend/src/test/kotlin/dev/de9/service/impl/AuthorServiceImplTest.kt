@@ -82,10 +82,10 @@ class AuthorServiceImplTest(
         "'updateName' method can call repository" - {
             val mock = getMock(authorRepository)
 
-            every { mock.updateName(any(), any()) } returns 1
+            every { mock.update(any()) } returns 1
 
-            service.updateName(1, "name") shouldBe 1
-            verify { mock.updateName(1, "name") }
+            service.update(AuthorEntity(1, "name")) shouldBe 1
+            verify { mock.update(AuthorEntity(1, "name")) }
         }
 
         "'delete' method can call repository" - {

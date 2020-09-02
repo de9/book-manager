@@ -46,15 +46,14 @@ interface AuthorsOperation {
     fun getBooksByAuthor(@PathVariable id: Long): List<BookEntity>
 
     /**
-     * 指定した著者の氏名を更新する。
-     * リクエストボディはtext/plainとする。
+     * 指定した著者を更新する。
      * @param id 著者ID
-     * @param name 氏名
+     * @param author 著者
      * @return 更新した数
      *  - HTTP_NOT_FOUND: 指定の著者が存在しなかった。
      */
     @Put(uri = "/{id}/name")
-    fun putName(@PathVariable id: Long, @Body name: String): HttpResponse<*>
+    fun putAuthor(@PathVariable id: Long, @Body author: AuthorEntity): HttpResponse<*>
 
     /**
      * 指定した著者を削除する。
