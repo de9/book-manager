@@ -11,7 +11,7 @@
     <p>
       <label>
         出版日
-        <input type="date" placeholder="書籍出版日を入力" v-model="dateOfPublication">
+        <input type="date" placeholder="yyyy-MM-dd" v-model="dateOfPublication">
         <button v-on:click="putDateOfPublication">更新</button>
       </label>
     </p>

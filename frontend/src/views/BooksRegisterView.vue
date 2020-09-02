@@ -9,7 +9,7 @@
     <p>
       <label>
         出版日【必須】
-        <input type="date" placeholder="書籍出版日を入力" v-model="dateOfPublication">
+        <input type="date" placeholder="yyyy-MM-dd" v-model="dateOfPublication">
       </label>
     </p>
     <p>
