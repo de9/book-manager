@@ -32,6 +32,10 @@
       </label>
     </p>
     <h3>著者を追加</h3>
+    <label>
+      <input type="text" placeholder="著者氏名を入力" v-model="searchName">
+      <button v-on:click="getAllAuthors">検索</button>
+    </label>
     <table>
       <thead>
       <tr>
@@ -63,7 +67,8 @@ export default {
       title: null,
       dateOfPublication: null,
       authors: [],
-      allAuthors: []
+      allAuthors: [],
+      searchName: null
     }
   },
   computed: {
@@ -105,7 +110,7 @@ export default {
         })
     },
     getAllAuthors() {
-      this.$axios.get('/authors')
+      this.$axios.get('/authors', {params: {name: this.searchName}})
         .then(response => {
           this.allAuthors = response.data
         }).catch(err => {
