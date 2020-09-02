@@ -1,17 +1,17 @@
-CREATE TABLE book
+CREATE TABLE IF NOT EXISTS book
 (
     id                  VARCHAR AUTO_INCREMENT PRIMARY KEY,
     title               VARCHAR,
     date_of_publication DATE NOT NULL
 );
 
-CREATE TABLE author
+CREATE TABLE IF NOT EXISTS author
 (
     id   VARCHAR AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR NOT NULL
 );
 
-CREATE TABLE book_author
+CREATE TABLE IF NOT EXISTS book_author
 (
     book_id   VARCHAR,
     author_id VARCHAR,
