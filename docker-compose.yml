@@ -1,0 +1,10 @@
+version: "3"
+services:
+  api:
+    image: dev.de9.jib/book-manager-api:latest
+    expose:
+      - 8080
+  web:
+    build: ./frontend
+    ports:
+    - "8080:80"
