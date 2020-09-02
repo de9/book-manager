@@ -66,46 +66,22 @@ class JdbcBookRepositoryTest(
             findResults.shouldBeEmpty()
         }
 
-        "can update title" - {
+        "can update book" - {
             repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1)))
             repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2)))
-            repository.updateTitle(1, "updated title")
+            repository.update(BookEntity(1, "updated title", LocalDate.of(2030, 3, 3)))
             val findResults = repository.findAll()
 
             findResults.shouldContainAll(
-                    BookEntity(1, "updated title", LocalDate.of(2010, 1, 1)),
+                    BookEntity(1, "updated title", LocalDate.of(2030, 3, 3)),
                     BookEntity(2, "test title2", LocalDate.of(2020, 2, 2))
             )
         }
 
-        "can NOT update title by NOT exist id" - {
+        "can NOT update book by NON-existent id" - {
             repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1)))
             repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2)))
-            repository.updateTitle(3, "updated title")
-            val findResults = repository.findAll()
-
-            findResults.shouldContainAll(
-                    BookEntity(1, "test title1", LocalDate.of(2010, 1, 1)),
-                    BookEntity(2, "test title2", LocalDate.of(2020, 2, 2))
-            )
-        }
-
-        "can update date of publication" - {
-            repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1)))
-            repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2)))
-            repository.updateDateOfPublication(2, LocalDate.of(2030, 3, 3))
-            val findResults = repository.findAll()
-
-            findResults.shouldContainAll(
-                    BookEntity(1, "test title1", LocalDate.of(2010, 1, 1)),
-                    BookEntity(2, "test title2", LocalDate.of(2030, 3, 3))
-            )
-        }
-
-        "can NOT update date of publication by NOT exist id" - {
-            repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1)))
-            repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2)))
-            repository.updateDateOfPublication(3, LocalDate.of(2030, 3, 3))
+            repository.update(BookEntity(3, "test title1", LocalDate.of(2010, 1, 1)))
             val findResults = repository.findAll()
 
             findResults.shouldContainAll(

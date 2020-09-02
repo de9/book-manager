@@ -7,10 +7,7 @@ import dev.de9.service.BookAuthorService
 import dev.de9.service.BookService
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
-import io.micronaut.http.MediaType
-import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
-import java.time.LocalDate
 
 /**
  * booksリソースのコントローラー
@@ -24,6 +21,7 @@ class BooksController(
     companion object {
         /** 出版済みの書籍を指定した場合のエラーメッセージ */
         const val ALREADY_PUBLISHED_REASON = "This book was already published."
+
         /** 出版日に過去の日付を指定した場合のエラーメッセージ */
         const val SPECIFY_PAST_DATE_REASON = "Date of publication is not allowed to be past date."
     }
@@ -46,18 +44,8 @@ class BooksController(
         return bookAuthorService.findAuthorsByBook(id)
     }
 
-    @Consumes(MediaType.TEXT_PLAIN)
-    override fun putTitle(id: Long, title: String): HttpResponse<*> {
-        return when (bookService.updateTitle(id, title)) {
-            1 -> HttpResponse.ok<Any>()
-            -1 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
-            else -> HttpResponse.notFound<Any>()
-        }
-    }
-
-    @Consumes(MediaType.TEXT_PLAIN)
-    override fun putDateOfPublication(id: Long, dateOfPublication: LocalDate): HttpResponse<*> {
-        return when (bookService.updateDateOfPublication(id, dateOfPublication)) {
+    override fun putBook(id: Long, book: BookEntity): HttpResponse<*> {
+        return when (bookService.update(book)) {
             1 -> HttpResponse.ok<Any>()
             -1 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
             -2 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)

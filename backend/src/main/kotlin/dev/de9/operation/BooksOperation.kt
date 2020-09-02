@@ -2,10 +2,8 @@ package dev.de9.operation
 
 import dev.de9.entity.AuthorEntity
 import dev.de9.entity.BookEntity
-import io.micronaut.core.convert.format.Format
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.*
-import java.time.LocalDate
 
 /**
  * booksリソースのオペレーションインターフェース
@@ -48,31 +46,15 @@ interface BooksOperation {
     fun getAuthorsByBook(@PathVariable id: Long): List<AuthorEntity>
 
     /**
-     * 指定した書籍のタイトルを更新する。
-     * リクエストボディはtext/plainとする。
+     * 指定した書籍を更新する。
      * @param id 書籍ID
-     * @param title タイトル
+     * @param book 書籍
      * @return 更新した数
      *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
      *  - HTTP_BAD_REQUEST: 更新できない書籍を指定した。
      */
-    @Put(uri = "/{id}/title")
-    fun putTitle(@PathVariable id: Long, @Body title: String): HttpResponse<*>
-
-    /**
-     * 指定した書籍の出版日を更新する。
-     * リクエストボディはtext/plainとする。
-     * @param id 書籍ID
-     * @param dateOfPublication 出版日
-     * @return 更新した数
-     *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
-     *  - HTTP_BAD_REQUEST: 更新できない書籍を指定した。
-     */
-    @Put(uri = "/{id}/date-of-publication")
-    fun putDateOfPublication(
-            @PathVariable id: Long,
-            @Body @Format("yyyy-MM-dd") dateOfPublication: LocalDate
-    ): HttpResponse<*>
+    @Put(uri = "/{id}")
+    fun putBook(@PathVariable id: Long, @Body book: BookEntity): HttpResponse<*>
 
     /**
      * 書籍に著者を追加する。

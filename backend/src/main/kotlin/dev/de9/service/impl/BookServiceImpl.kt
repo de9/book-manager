@@ -27,22 +27,15 @@ class BookServiceImpl(private val repository: BookRepository) : BookService {
         }
     }
 
-    override fun updateTitle(id: Long, title: String): Int {
-        repository.findById(id)
+    override fun update(book: BookEntity): Int {
+        val now = LocalDate.now()
+        if (book.dateOfPublication < now) return -2
+
+        repository.findById(book.id)
                 .let { it ?: return 0 }
                 .also { if (it.dateOfPublication <= LocalDate.now()) return -1 }
-        return repository.updateTitle(id, title)
-    }
 
-    override fun updateDateOfPublication(id: Long, dateOfPublication: LocalDate): Int {
-        val now = LocalDate.now()
-        if (dateOfPublication < now) return -2
-
-        repository.findById(id)
-                .let { it ?: return 0 }
-                .also { if (it.dateOfPublication <= now) return -1 }
-
-        return repository.updateDateOfPublication(id, dateOfPublication)
+        return repository.update(book)
     }
 
     override fun delete(id: Long): Int {

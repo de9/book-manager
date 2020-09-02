@@ -4,7 +4,6 @@ import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
 import io.micronaut.context.annotation.Requires
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import java.time.LocalDate
 import javax.inject.Singleton
 
 /**
@@ -22,10 +21,8 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
                 "SELECT * FROM book;"
         const val FIND_BY_TITLE_LIKE_SQL =
                 "SELECT * FROM book WHERE title LIKE :title;"
-        const val UPDATE_TITLE_SQL =
-                "UPDATE book SET title = :title WHERE id = :id;"
-        const val UPDATE_DATE_OF_PUBLICATION_SQL =
-                "UPDATE book SET date_of_publication = :date_of_publication WHERE id = :id;"
+        const val UPDATE_SQL =
+                "UPDATE book SET title = :title, date_of_publication = :date_of_publication WHERE id = :id;"
         const val DELETE_SQL =
                 "DELETE FROM book WHERE id = :id;"
     }
@@ -73,22 +70,14 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
         }
     }
 
-    override fun updateTitle(id: Long, title: String): Int {
+    override fun update(book: BookEntity): Int {
         val params = mapOf(
-                "id" to id,
-                "title" to title
+                "id" to book.id,
+                "title" to book.title,
+                "date_of_publication" to book.dateOfPublication
         )
 
-        return jdbcTemplate.update(UPDATE_TITLE_SQL, params)
-    }
-
-    override fun updateDateOfPublication(id: Long, dateOfPublication: LocalDate): Int {
-        val params = mapOf(
-                "id" to id,
-                "date_of_publication" to dateOfPublication
-        )
-
-        return jdbcTemplate.update(UPDATE_DATE_OF_PUBLICATION_SQL, params)
+        return jdbcTemplate.update(UPDATE_SQL, params)
     }
 
     override fun delete(id: Long): Int {

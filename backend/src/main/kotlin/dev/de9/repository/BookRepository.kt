@@ -1,7 +1,6 @@
 package dev.de9.repository
 
 import dev.de9.entity.BookEntity
-import java.time.LocalDate
 
 /**
  * 書籍を扱うリポジトリインターフェース
@@ -35,20 +34,11 @@ interface BookRepository {
     fun findByTitleLike(title: String): List<BookEntity>
 
     /**
-     * 指定した書籍のタイトルを更新する。
-     * @param id 書籍ID
-     * @param title タイトル
+     * 指定した書籍を更新する。
+     * @param book 書籍
      * @return 更新した数
      */
-    fun updateTitle(id: Long, title: String): Int
-
-    /**
-     * 指定した書籍の出版日を更新する。
-     * @param id 書籍ID
-     * @param dateOfPublication 出版日
-     * @return 更新した数
-     */
-    fun updateDateOfPublication(id: Long, dateOfPublication: LocalDate): Int
+    fun update(book: BookEntity): Int
 
     /**
      * 指定した書籍を削除する。
