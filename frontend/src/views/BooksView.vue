@@ -13,7 +13,11 @@
       </thead>
       <tbody>
       <tr v-for="book in books" :key="book.id">
-        <td>{{ !book.title ? '（タイトル未定）' : book.title }}</td>
+        <td>
+          <router-link :to="{ name: 'BooksDetailView', params: { bookId: book.id } }">
+            {{ !book.title ? '（タイトル未定）' : book.title }}
+          </router-link>
+        </td>
         <td>{{ book.dateOfPublication }}</td>
       </tr>
       </tbody>
