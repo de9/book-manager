@@ -30,13 +30,16 @@
     <table>
       <thead>
       <tr>
+        <th></th>
         <th>氏名</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="author in otherThanAuthors" :key="author.id">
+        <td style="white-space: nowrap; width: 1px">
+          <a style="font-weight: bold; cursor: pointer" v-on:click="putBookAuthor(author)">この著者を追加</a>
+        </td>
         <td>
-          <a style="font-weight: bold" v-on:click="putBookAuthor(author)">追加する</a> ：
           <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
             {{ author.name }}
           </router-link>
