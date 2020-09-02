@@ -26,6 +26,11 @@
         </label>
       </label>
     </p>
+    <p>
+      <label>
+        <button style="background-color: #f37b00" v-on:click="deleteBook">書籍を削除</button>
+      </label>
+    </p>
     <h3>著者を追加</h3>
     <table>
       <thead>
@@ -135,6 +140,18 @@ export default {
         }).catch(err => {
           alert('追加に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
         })
+    },
+    deleteBook() {
+      let select = confirm('この書籍を削除しますか？')
+      if (select) {
+        this.$axios.delete(this.detailUrl)
+          .then(() => {
+            alert('削除しました。')
+            this.$router.push({ name: 'BooksView' })
+          }).catch(err => {
+            alert('削除に失敗しました。:' + err.response.status + err.response.statusText)
+          })
+      }
     }
   }
 }
