@@ -22,6 +22,7 @@
           <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
             {{ author.name }}
           </router-link>
+          <a class="delete" v-on:click="deleteBookAuthor(author)">除外</a>
           、
         </label>
       </label>
@@ -46,7 +47,7 @@
       <tbody>
       <tr v-for="author in otherThanAuthors" :key="author.id">
         <td style="white-space: nowrap; width: 1px">
-          <a style="font-weight: bold; cursor: pointer" v-on:click="putBookAuthor(author)">この著者を追加</a>
+          <a class="add" v-on:click="putBookAuthor(author)">この著者を追加</a>
         </td>
         <td>
           <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
@@ -140,7 +141,6 @@ export default {
       this.$axios.put(this.detailUrl + '/authors/' + author.id)
         .then(() => {
           this.getAuthorsByBook()
-          this.getAllAuthors()
           alert(author.name + 'を著者に追加しました。')
         }).catch(err => {
           alert('追加に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
@@ -157,11 +157,31 @@ export default {
             alert('削除に失敗しました。:' + err.response.status + err.response.statusText)
           })
       }
-    }
+    },
+    deleteBookAuthor(author) {
+      let select = confirm('この著者を除外しますか？')
+      if (select) {
+        this.$axios.delete(this.detailUrl + '/authors/' + author.id)
+          .then(() => {
+            this.getAuthorsByBook()
+            alert(author.name + 'をこの書籍の著者から除外しました。')
+          }).catch(err => {
+            alert('除外に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
+          })
+      }
+    },
   }
 }
 </script>
 
 <style scoped>
-
+a.add {
+  font-weight: bold;
+  cursor: pointer;
+}
+a.delete {
+  font-weight: bold;
+  cursor: pointer;
+  color: #f37b00;
+}
 </style>
