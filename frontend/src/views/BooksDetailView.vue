@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>基本情報</h3>
+    <h3>書籍基本情報</h3>
     <p>
       <label>
         タイトル
@@ -19,7 +19,9 @@
       <label>
         著者：
         <label v-for="author in authors" :key="author.id">
-          {{ author.name }}
+          <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
+            {{ author.name }}
+          </router-link>
           、
         </label>
       </label>
@@ -35,7 +37,9 @@
       <tr v-for="author in otherThanAuthors" :key="author.id">
         <td>
           <a style="font-weight: bold" v-on:click="putBookAuthor(author)">追加する</a> ：
-          {{ author.name }}
+          <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
+            {{ author.name }}
+          </router-link>
         </td>
       </tr>
       </tbody>

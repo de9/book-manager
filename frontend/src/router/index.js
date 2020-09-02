@@ -6,6 +6,7 @@ import AuthorsView from '@/views/AuthorsView'
 import BooksRegisterView from '@/views/BooksRegisterView'
 import AuthorsRegisterView from '@/views/AuthorsRegisterView'
 import BooksDetailView from '@/views/BooksDetailView'
+import AuthorsDetailView from '@/views/AuthorsDetailView'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/books/detail/:bookId',
     name: 'BooksDetailView',
     component: BooksDetailView
+  },
+  {
+    path: '/authors/detail/:authorId',
+    name: 'AuthorsDetailView',
+    component: AuthorsDetailView
   }
 ]
 

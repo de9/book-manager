@@ -12,7 +12,11 @@
       </thead>
       <tbody>
       <tr v-for="author in authors" :key="author.id">
-        <td>{{ author.name }}</td>
+        <td>
+          <router-link :to="{ name: 'AuthorsDetailView', params: { authorId: author.id } }">
+            {{ author.name }}
+          </router-link>
+        </td>
       </tr>
       </tbody>
     </table>
