@@ -32,4 +32,19 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+@media (prefers-color-scheme: dark) {
+  #app {
+    color: #d6e5fd;
+  }
+  a {
+    color: #aacaf8;
+  }
+  #nav a {
+    color: #d6e5fd;
+  }
+  #nav a.router-link-exact-active {
+    color: #a5fdcf;
+  }
+}
 </style>
