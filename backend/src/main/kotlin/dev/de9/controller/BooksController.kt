@@ -5,6 +5,7 @@ import dev.de9.entity.BookEntity
 import dev.de9.operation.BooksOperation
 import dev.de9.service.BookAuthorService
 import dev.de9.service.BookService
+import dev.de9.service.result.UpdateBookResult
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.annotation.Controller
@@ -46,10 +47,12 @@ class BooksController(
 
     override fun putBook(id: Long, book: BookEntity): HttpResponse<*> {
         return when (bookService.update(book)) {
-            1 -> HttpResponse.ok<Any>()
-            -1 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
-            -2 -> HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)
-            else -> HttpResponse.notFound<Any>()
+            is UpdateBookResult.Success -> HttpResponse.ok<Any>()
+            is UpdateBookResult.AlreadyPublished ->
+                HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
+            is UpdateBookResult.SpecifyPastDate ->
+                HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)
+            is UpdateBookResult.NotFound -> HttpResponse.notFound<Any>()
         }
     }
 

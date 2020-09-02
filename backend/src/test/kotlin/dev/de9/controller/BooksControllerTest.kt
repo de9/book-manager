@@ -7,6 +7,7 @@ import dev.de9.service.BookAuthorService
 import dev.de9.service.BookService
 import dev.de9.service.impl.BookAuthorServiceImpl
 import dev.de9.service.impl.BookServiceImpl
+import dev.de9.service.result.UpdateBookResult
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.micronaut.http.HttpStatus
@@ -111,7 +112,7 @@ class BooksControllerTest(
         "'putBook' entrypoint returns HTTP OK on SUCCESS" - {
             val mock = getMock(bookService)
 
-            every { mock.update(any()) } returns 1
+            every { mock.update(any()) } returns UpdateBookResult.Success
 
             client.putBook(1, BookEntity(1, "title", LocalDate.of(2010, 1, 1))).status shouldBe HttpStatus.OK
             verify { mock.update(BookEntity(1, "title", LocalDate.of(2010, 1, 1))) }
@@ -120,7 +121,7 @@ class BooksControllerTest(
         "'putBook' entrypoint returns HTTP NOT FOUND if book not found" - {
             val mock = getMock(bookService)
 
-            every { mock.update(any()) } returns 0
+            every { mock.update(any()) } returns UpdateBookResult.NotFound
 
             val response = client.putBook(2, BookEntity(2, "title", LocalDate.of(2010, 1, 1)))
             response.status shouldBe HttpStatus.NOT_FOUND
@@ -130,7 +131,7 @@ class BooksControllerTest(
         "'putBook' entrypoint returns HTTP BAD REQUEST if book is already published" - {
             val mock = getMock(bookService)
 
-            every { mock.update(any()) } returns -1
+            every { mock.update(any()) } returns UpdateBookResult.AlreadyPublished
 
             val response = try {
                 client.putBook(2, BookEntity(2, "title", LocalDate.of(2010, 1, 1)))
@@ -145,7 +146,7 @@ class BooksControllerTest(
         "'putBook' entrypoint returns HTTP BAD REQUEST if specify past date" - {
             val mock = getMock(bookService)
 
-            every { mock.update(any()) } returns -2
+            every { mock.update(any()) } returns UpdateBookResult.SpecifyPastDate
 
             val response = try {
                 client.putBook(2, BookEntity(2, "title", LocalDate.of(2010, 1, 1)))

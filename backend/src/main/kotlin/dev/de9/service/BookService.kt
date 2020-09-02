@@ -1,6 +1,7 @@
 package dev.de9.service
 
 import dev.de9.entity.BookEntity
+import dev.de9.service.result.UpdateBookResult
 
 /**
  * 書籍を扱うサービスインターフェース
@@ -33,11 +34,9 @@ interface BookService {
      * まだ出版されていない書籍のみ更新できる。
      * 出版日を過去の日付に変更することはできない。
      * @param book 書籍
-     * @return 更新した数
-     * - -1 出版済みの書籍を指定した。
-     * - -2 出版日に過去の日付を指定した。
+     * @return 結果オブジェクト
      */
-    fun update(book: BookEntity): Int
+    fun update(book: BookEntity): UpdateBookResult
 
     /**
      * 指定した書籍を削除する。

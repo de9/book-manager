@@ -3,6 +3,7 @@ package dev.de9.service.impl
 import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
 import dev.de9.service.BookService
+import dev.de9.service.result.UpdateBookResult
 import java.time.LocalDate
 import javax.inject.Singleton
 
@@ -27,15 +28,15 @@ class BookServiceImpl(private val repository: BookRepository) : BookService {
         }
     }
 
-    override fun update(book: BookEntity): Int {
+    override fun update(book: BookEntity): UpdateBookResult {
         val now = LocalDate.now()
-        if (book.dateOfPublication < now) return -2
+        if (book.dateOfPublication < now) return UpdateBookResult.SpecifyPastDate
 
         repository.findById(book.id)
-                .let { it ?: return 0 }
-                .also { if (it.dateOfPublication <= LocalDate.now()) return -1 }
+                .let { it ?: return UpdateBookResult.NotFound }
+                .also { if (it.dateOfPublication <= LocalDate.now()) return UpdateBookResult.AlreadyPublished }
 
-        return repository.update(book)
+        return if (repository.update(book) > 0) UpdateBookResult.Success else UpdateBookResult.NotFound
     }
 
     override fun delete(id: Long): Int {
