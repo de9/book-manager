@@ -12,12 +12,12 @@ interface BooksOperation {
     /**
      * 書籍を追加する。
      * @param book 書籍
-     * @return
+     * @return 追加した書籍のID
      *  - HTTP_OK: 追加に成功した。
      *  - HTTP_BAD_REQUEST: 追加に失敗した。
      */
     @Post
-    fun postNewBook(@Body book: BookEntity): HttpResponse<*>
+    fun postNewBook(@Body book: BookEntity): HttpResponse<Long?>
 
     /**
      * 書籍をタイトルで部分一致検索する。

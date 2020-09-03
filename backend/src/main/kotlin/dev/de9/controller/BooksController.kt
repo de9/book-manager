@@ -27,9 +27,8 @@ class BooksController(
         const val SPECIFY_PAST_DATE_REASON = "Date of publication is not allowed to be past date."
     }
 
-    override fun postNewBook(book: BookEntity): HttpResponse<*> {
-        val addCount = bookService.add(book)
-        return if (addCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
+    override fun postNewBook(book: BookEntity): HttpResponse<Long?> {
+        return bookService.add(book)?.let { HttpResponse.ok(it) } ?: HttpResponse.badRequest()
     }
 
     override fun getBooks(title: String?): List<BookEntity> {

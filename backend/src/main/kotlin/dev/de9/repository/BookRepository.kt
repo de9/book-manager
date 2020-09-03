@@ -9,9 +9,10 @@ interface BookRepository {
     /**
      * 書籍を追加する。
      * @param book 書籍
-     * @return 追加した数
+     * @return 追加した書籍のID
+     * - null: 追加できなかった
      */
-    fun add(book: BookEntity): Int
+    fun add(book: BookEntity): Long?
 
     /**
      * 書籍IDを指定して書籍を取得する。

@@ -43,7 +43,7 @@ class BooksControllerTest(
         "'postNewBook' entrypoint returns HTTP BAD REQUEST on FAILURE" - {
             val mock = getMock(bookService)
 
-            every { mock.add(any()) } returns 0
+            every { mock.add(any()) } returns null
 
             val entity = BookEntity(0, "title", LocalDate.of(2010, 1, 1))
             val response = try {

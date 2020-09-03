@@ -12,7 +12,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class BookServiceImpl(private val repository: BookRepository) : BookService {
-    override fun add(book: BookEntity): Int {
+    override fun add(book: BookEntity): Long? {
         return repository.add(book)
     }
 

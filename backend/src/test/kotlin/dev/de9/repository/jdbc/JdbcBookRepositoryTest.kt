@@ -21,6 +21,11 @@ class JdbcBookRepositoryTest(
 ) : FreeSpec({
 
     "book repository" - {
+        "can add book" - {
+            repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1))) shouldBe 1
+            repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2))) shouldBe 2
+        }
+
         "can find book by ID" - {
             repository.add(BookEntity(0, "test title1", LocalDate.of(2010, 1, 1)))
             repository.add(BookEntity(0, "test title2", LocalDate.of(2020, 2, 2)))

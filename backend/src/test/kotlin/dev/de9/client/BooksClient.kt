@@ -11,7 +11,7 @@ import io.micronaut.http.client.annotation.Client
  */
 @Client(value = "/books")
 interface BooksClient : BooksOperation {
-    override fun postNewBook(book: BookEntity): HttpResponse<*>
+    override fun postNewBook(book: BookEntity): HttpResponse<Long?>
 
     override fun getBooks(title: String?): List<BookEntity>
 

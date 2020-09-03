@@ -3,7 +3,9 @@ package dev.de9.repository.jdbc
 import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
 import io.micronaut.context.annotation.Requires
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import javax.inject.Singleton
 
 /**
@@ -27,13 +29,15 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
                 "DELETE FROM book WHERE id = :id;"
     }
 
-    override fun add(book: BookEntity): Int {
+    override fun add(book: BookEntity): Long? {
         val params = mapOf(
                 "title" to book.title,
                 "date_of_publication" to book.dateOfPublication
         )
 
-        return jdbcTemplate.update(ADD_SQL, params)
+        return GeneratedKeyHolder()
+                .also { jdbcTemplate.update(ADD_SQL, MapSqlParameterSource(params), it) }
+                .let { it.key?.toLong() }
     }
 
     override fun findById(id: Long): BookEntity? {
