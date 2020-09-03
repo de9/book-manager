@@ -9,7 +9,7 @@ plugins {
     id "com.google.cloud.tools.jib" version "2.5.0"
 }
 
-version "0.1"
+version "1.0.0"
 group "dev.de9"
 
 repositories {
