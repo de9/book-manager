@@ -12,7 +12,6 @@ import javax.inject.Singleton
  * 書籍と著者の関係を扱うリポジトリのH2-JDBC実装
  */
 @Singleton
-@Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcBookAuthorRepository(
         private val jdbcTemplate: NamedParameterJdbcTemplate
 ) : BookAuthorRepository {

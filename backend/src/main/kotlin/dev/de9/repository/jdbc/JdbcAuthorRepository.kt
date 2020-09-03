@@ -10,7 +10,6 @@ import javax.inject.Singleton
  * 著者を扱うリポジトリのH2-JDBC実装
  */
 @Singleton
-@Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : AuthorRepository {
     private companion object {
         const val ADD_SQL =

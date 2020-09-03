@@ -12,7 +12,6 @@ import javax.inject.Singleton
  * 書籍を扱うリポジトリのH2-JDBC実装
  */
 @Singleton
-@Requires(beans = [NamedParameterJdbcTemplate::class])
 class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) : BookRepository {
     private companion object {
         const val ADD_SQL =
