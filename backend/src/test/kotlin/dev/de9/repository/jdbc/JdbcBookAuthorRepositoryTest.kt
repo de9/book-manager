@@ -104,9 +104,9 @@ class JdbcBookAuthorRepositoryTest(
         if (!testCase.isTopLevel()) {
             jdbcTemplate.update("SET REFERENTIAL_INTEGRITY FALSE;", mapOf<String, String>())
             jdbcTemplate.update("TRUNCATE TABLE book;", mapOf<String, String>())
-            jdbcTemplate.update("ALTER TABLE book ALTER COLUMN id INT AUTO_INCREMENT(1);", mapOf<String, String>())
+            jdbcTemplate.update("ALTER TABLE book ALTER COLUMN id LONG AUTO_INCREMENT(1);", mapOf<String, String>())
             jdbcTemplate.update("TRUNCATE TABLE author;", mapOf<String, String>())
-            jdbcTemplate.update("ALTER TABLE author ALTER COLUMN id INT AUTO_INCREMENT(1);", mapOf<String, String>())
+            jdbcTemplate.update("ALTER TABLE author ALTER COLUMN id LONG AUTO_INCREMENT(1);", mapOf<String, String>())
             jdbcTemplate.update("TRUNCATE TABLE book_author;", mapOf<String, String>())
             jdbcTemplate.update("SET REFERENTIAL_INTEGRITY TRUE;", mapOf<String, String>())
         }
