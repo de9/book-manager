@@ -5,8 +5,10 @@
       <label>
         氏名
         <input type="text" placeholder="著者氏名を入力" v-model="name">
-        <button v-on:click="putName">更新</button>
       </label>
+    </p>
+    <p>
+      <button v-on:click="putAuthor">更新</button>
     </p>
     <p>
       <label>
@@ -76,10 +78,10 @@ export default {
           alert('データがありません。:' + err.response.status + err.response.statusText)
         })
     },
-    putName() {
-      this.$axios.put(this.detailUrl + '/name', this.name, { headers: { 'Content-Type': 'text/plain' } })
+    putAuthor() {
+      this.$axios.put(this.detailUrl, {id: this.$route.params.authorId, name: this.name})
         .then(() => {
-          alert('氏名を変更しました。')
+          alert('著者情報を更新しました。')
         }).catch(err => {
           alert('変更に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
         })

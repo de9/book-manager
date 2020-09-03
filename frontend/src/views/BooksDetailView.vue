@@ -5,15 +5,16 @@
       <label>
         タイトル
         <input type="text" placeholder="書籍タイトルを入力" v-model="title">
-        <button v-on:click="putTitle">更新</button>
       </label>
     </p>
     <p>
       <label>
         出版日
         <input type="date" placeholder="yyyy-MM-dd" v-model="dateOfPublication">
-        <button v-on:click="putDateOfPublication">更新</button>
       </label>
+    </p>
+    <p>
+      <button v-on:click="putBook">更新</button>
     </p>
     <p>
       <label>
@@ -118,21 +119,13 @@ export default {
           alert('データがありません。:' + err.response.status + err.response.statusText)
         })
     },
-    putTitle() {
-      this.$axios.put(this.detailUrl + '/title', this.title, { headers: { 'Content-Type': 'text/plain' } })
-        .then(() => {
-          alert('タイトルを変更しました。')
-        }).catch(err => {
-          alert('変更に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
-        })
-    },
-    putDateOfPublication() {
-      this.$axios.put(
-        this.detailUrl + '/date-of-publication',
-        this.dateOfPublication,
-        { headers: { 'Content-Type': 'text/plain' } }
-      ).then(() => {
-        alert('出版日を変更しました。')
+    putBook() {
+      this.$axios.put(this.detailUrl, {
+        id: this.$route.params.bookId,
+        title: this.title,
+        dateOfPublication: this.dateOfPublication
+      }).then(() => {
+        alert('書籍情報を更新しました。')
       }).catch(err => {
         alert('変更に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
       })
