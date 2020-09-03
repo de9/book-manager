@@ -17,31 +17,19 @@ class AuthorsController(
         private val bookAuthorService: BookAuthorService
 ) : AuthorsOperation {
 
-    override fun postNewAuthor(author: AuthorEntity): HttpResponse<*> {
-        val addCount = authorService.add(author)
-        return if (addCount > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
-    }
+    override fun postNewAuthor(author: AuthorEntity): HttpResponse<*> =
+            if (authorService.add(author) > 0) HttpResponse.ok<Any>() else HttpResponse.badRequest<Any>()
 
-    override fun getAuthors(name: String?): List<AuthorEntity> {
-        return authorService.findAuthors(name)
-    }
+    override fun getAuthors(name: String?): List<AuthorEntity> = authorService.findAuthors(name)
 
-    override fun getAuthorById(id: Long): HttpResponse<AuthorEntity> {
-        val result = authorService.findById(id)
-        return if (result != null) HttpResponse.ok(result) else HttpResponse.notFound()
-    }
+    override fun getAuthorById(id: Long): HttpResponse<AuthorEntity> =
+            authorService.findById(id)?.let { HttpResponse.ok(it) } ?: HttpResponse.notFound()
 
-    override fun getBooksByAuthor(id: Long): List<BookEntity> {
-        return bookAuthorService.findBooksByAuthor(id)
-    }
+    override fun getBooksByAuthor(id: Long): List<BookEntity> = bookAuthorService.findBooksByAuthor(id)
 
-    override fun putAuthor(id: Long, author: AuthorEntity): HttpResponse<*> {
-        val updateCount = authorService.update(author)
-        return if (updateCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
-    }
+    override fun putAuthor(id: Long, author: AuthorEntity): HttpResponse<*> =
+            if (authorService.update(author) > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
 
-    override fun deleteAuthor(id: Long): HttpResponse<*> {
-        val deleteCount = authorService.delete(id)
-        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
-    }
+    override fun deleteAuthor(id: Long): HttpResponse<*> =
+            if (authorService.delete(id) > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
 }

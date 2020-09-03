@@ -10,7 +10,5 @@ import javax.sql.DataSource
 class JdbcTemplateFactory(private val dataSource: DataSource) {
     @Bean
     @Singleton
-    fun jdbcTemplate(): NamedParameterJdbcTemplate {
-        return NamedParameterJdbcTemplate(dataSource)
-    }
+    fun jdbcTemplate(): NamedParameterJdbcTemplate = NamedParameterJdbcTemplate(dataSource)
 }

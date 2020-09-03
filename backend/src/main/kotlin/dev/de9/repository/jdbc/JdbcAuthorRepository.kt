@@ -2,7 +2,6 @@ package dev.de9.repository.jdbc
 
 import dev.de9.entity.AuthorEntity
 import dev.de9.repository.AuthorRepository
-import io.micronaut.context.annotation.Requires
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import javax.inject.Singleton
 
@@ -43,14 +42,13 @@ class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
         }.singleOrNull()
     }
 
-    override fun findAll(): List<AuthorEntity> {
-        return jdbcTemplate.query(FIND_ALL_SQL) { rs, _ ->
-            AuthorEntity(
-                    id = rs.getLong("id"),
-                    name = rs.getString("name")
-            )
-        }
-    }
+    override fun findAll(): List<AuthorEntity> =
+            jdbcTemplate.query(FIND_ALL_SQL) { rs, _ ->
+                AuthorEntity(
+                        id = rs.getLong("id"),
+                        name = rs.getString("name")
+                )
+            }
 
     override fun findByNameLike(name: String): List<AuthorEntity> {
         val params = mapOf("name" to name)
@@ -73,8 +71,8 @@ class JdbcAuthorRepository(private val jdbcTemplate: NamedParameterJdbcTemplate)
     }
 
     override fun delete(id: Long): Int {
-        val sqlParameterMap = mapOf("id" to id)
-        return jdbcTemplate.update(DELETE_SQL, sqlParameterMap)
+        val params = mapOf("id" to id)
+        return jdbcTemplate.update(DELETE_SQL, params)
     }
 
 }

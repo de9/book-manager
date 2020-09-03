@@ -3,7 +3,6 @@ package dev.de9.repository.jdbc
 import dev.de9.entity.AuthorEntity
 import dev.de9.entity.BookEntity
 import dev.de9.repository.BookAuthorRepository
-import io.micronaut.context.annotation.Requires
 import org.springframework.dao.DataAccessException
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import javax.inject.Singleton

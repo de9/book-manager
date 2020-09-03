@@ -2,7 +2,6 @@ package dev.de9.repository.jdbc
 
 import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
-import io.micronaut.context.annotation.Requires
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -51,15 +50,14 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
         }.singleOrNull()
     }
 
-    override fun findAll(): List<BookEntity> {
-        return jdbcTemplate.query(FIND_ALL_SQL) { rs, _ ->
-            BookEntity(
-                    id = rs.getLong("id"),
-                    title = rs.getString("title"),
-                    dateOfPublication = rs.getDate("date_of_publication").toLocalDate()
-            )
-        }
-    }
+    override fun findAll(): List<BookEntity> =
+            jdbcTemplate.query(FIND_ALL_SQL) { rs, _ ->
+                BookEntity(
+                        id = rs.getLong("id"),
+                        title = rs.getString("title"),
+                        dateOfPublication = rs.getDate("date_of_publication").toLocalDate()
+                )
+            }
 
     override fun findByTitleLike(title: String): List<BookEntity> {
         val params = mapOf("title" to title)
@@ -84,7 +82,7 @@ class JdbcBookRepository(private val jdbcTemplate: NamedParameterJdbcTemplate) :
     }
 
     override fun delete(id: Long): Int {
-        val sqlParameterMap = mapOf("id" to id)
-        return jdbcTemplate.update(DELETE_SQL, sqlParameterMap)
+        val params = mapOf("id" to id)
+        return jdbcTemplate.update(DELETE_SQL, params)
     }
 }

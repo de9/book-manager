@@ -11,20 +11,12 @@ import javax.inject.Singleton
  */
 @Singleton
 class BookAuthorServiceImpl(private val repository: BookAuthorRepository) : BookAuthorService {
-    override fun add(bookId: Long, authorId: Long): Int {
-        return repository.add(bookId, authorId)
-    }
+    override fun add(bookId: Long, authorId: Long): Int = repository.add(bookId, authorId)
 
-    override fun findAuthorsByBook(bookId: Long): List<AuthorEntity> {
-        return repository.findAuthorsByBook(bookId)
-    }
+    override fun findAuthorsByBook(bookId: Long): List<AuthorEntity> = repository.findAuthorsByBook(bookId)
 
-    override fun findBooksByAuthor(authorId: Long): List<BookEntity> {
-        return repository.findBooksByAuthor(authorId)
-    }
+    override fun findBooksByAuthor(authorId: Long): List<BookEntity> = repository.findBooksByAuthor(authorId)
 
-    override fun delete(bookId: Long, authorId: Long): Int {
-        return repository.delete(bookId, authorId)
-    }
+    override fun delete(bookId: Long, authorId: Long): Int = repository.delete(bookId, authorId)
 
 }

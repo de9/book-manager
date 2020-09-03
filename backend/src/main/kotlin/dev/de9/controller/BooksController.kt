@@ -27,46 +27,33 @@ class BooksController(
         const val SPECIFY_PAST_DATE_REASON = "Date of publication is not allowed to be past date."
     }
 
-    override fun postNewBook(book: BookEntity): HttpResponse<Long?> {
-        return bookService.add(book)?.let { HttpResponse.ok(it) } ?: HttpResponse.badRequest()
-    }
+    override fun postNewBook(book: BookEntity): HttpResponse<Long?> =
+            bookService.add(book)?.let { HttpResponse.ok(it) } ?: HttpResponse.badRequest()
 
-    override fun getBooks(title: String?): List<BookEntity> {
-        return bookService.findBooks(title)
-    }
+    override fun getBooks(title: String?): List<BookEntity> =
+            bookService.findBooks(title)
 
-    override fun getBookById(id: Long): HttpResponse<BookEntity> {
-        val result = bookService.findById(id)
-        return if (result != null) HttpResponse.ok(result) else HttpResponse.notFound()
-    }
+    override fun getBookById(id: Long): HttpResponse<BookEntity> =
+            bookService.findById(id)?.let { HttpResponse.ok(it) } ?: HttpResponse.notFound()
 
-    override fun getAuthorsByBook(id: Long): List<AuthorEntity> {
-        return bookAuthorService.findAuthorsByBook(id)
-    }
+    override fun getAuthorsByBook(id: Long): List<AuthorEntity> = bookAuthorService.findAuthorsByBook(id)
 
-    override fun putBook(id: Long, book: BookEntity): HttpResponse<*> {
-        return when (bookService.update(book)) {
-            is UpdateBookResult.Success -> HttpResponse.ok<Any>()
-            is UpdateBookResult.AlreadyPublished ->
-                HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
-            is UpdateBookResult.SpecifyPastDate ->
-                HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)
-            is UpdateBookResult.NotFound -> HttpResponse.notFound<Any>()
-        }
-    }
+    override fun putBook(id: Long, book: BookEntity): HttpResponse<*> =
+            when (bookService.update(book)) {
+                is UpdateBookResult.Success -> HttpResponse.ok<Any>()
+                is UpdateBookResult.AlreadyPublished ->
+                    HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, ALREADY_PUBLISHED_REASON)
+                is UpdateBookResult.SpecifyPastDate ->
+                    HttpResponse.status<Any>(HttpStatus.BAD_REQUEST, SPECIFY_PAST_DATE_REASON)
+                is UpdateBookResult.NotFound -> HttpResponse.notFound<Any>()
+            }
 
-    override fun putBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> {
-        val addCount = bookAuthorService.add(bookId, authorId)
-        return if (addCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
-    }
+    override fun putBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> =
+            if (bookAuthorService.add(bookId, authorId) > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
 
-    override fun deleteBook(id: Long): HttpResponse<*> {
-        val deleteCount = bookService.delete(id)
-        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
-    }
+    override fun deleteBook(id: Long): HttpResponse<*> =
+            if (bookService.delete(id) > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
 
-    override fun deleteBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> {
-        val deleteCount = bookAuthorService.delete(bookId, authorId)
-        return if (deleteCount > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
-    }
+    override fun deleteBookAuthor(bookId: Long, authorId: Long): HttpResponse<*> =
+            if (bookAuthorService.delete(bookId, authorId) > 0) HttpResponse.ok<Any>() else HttpResponse.notFound<Any>()
 }
