@@ -37,10 +37,12 @@ export default {
   methods: {
     postBooks() {
       this.$axios.post('/books', {id: 0, title: this.title, dateOfPublication: this.dateOfPublication})
-        .then(() => {
+        .then(response => {
           alert((!this.title ? '（タイトル未定）' : this.title) + 'を追加しました。')
           this.title = null
           this.dateOfPublication = null
+          let newId = response.data
+          this.$router.push({name: 'BooksDetailView', params: {bookId: newId}})
         }).catch(err => {
           alert('追加に失敗しました。:' + err.response.status + ' ' + err.response.statusText)
         })
