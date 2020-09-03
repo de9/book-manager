@@ -5,7 +5,7 @@
       <router-link to="/books">書籍検索</router-link> |
       <router-link to="/authors">著者検索</router-link> |
       <router-link to="/books/register">書籍登録</router-link> |
-      <router-link to="/authors/register">著者登録</router-link> |
+      <router-link to="/authors/register">著者登録</router-link>
     </div>
     <router-view/>
   </div>
