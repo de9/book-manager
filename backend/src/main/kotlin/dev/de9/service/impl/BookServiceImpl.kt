@@ -4,6 +4,7 @@ import dev.de9.entity.BookEntity
 import dev.de9.repository.BookRepository
 import dev.de9.service.BookService
 import dev.de9.service.result.UpdateBookResult
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import javax.inject.Singleton
 
@@ -11,11 +12,14 @@ import javax.inject.Singleton
  * 書籍を扱うサービス実装クラス
  */
 @Singleton
-class BookServiceImpl(private val repository: BookRepository) : BookService {
+open class BookServiceImpl(private val repository: BookRepository) : BookService {
+    @Transactional
     override fun add(book: BookEntity): Long? = repository.add(book)
 
+    @Transactional(readOnly = true)
     override fun findById(id: Long): BookEntity? = repository.findById(id)
 
+    @Transactional(readOnly = true)
     override fun findBooks(title: String?): List<BookEntity> =
             if (title.isNullOrEmpty()) {
                 // タイトルを指定しない場合全て取得する
@@ -25,6 +29,7 @@ class BookServiceImpl(private val repository: BookRepository) : BookService {
                 repository.findByTitleLike("%$title%")
             }
 
+    @Transactional
     override fun update(book: BookEntity): UpdateBookResult {
         val now = LocalDate.now()
 
@@ -40,6 +45,7 @@ class BookServiceImpl(private val repository: BookRepository) : BookService {
         return if (repository.update(book) > 0) UpdateBookResult.Success else UpdateBookResult.NotFound
     }
 
+    @Transactional
     override fun delete(id: Long): Int = repository.delete(id)
 
 }
