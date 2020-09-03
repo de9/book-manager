@@ -52,7 +52,7 @@ interface AuthorsOperation {
      * @return 更新した数
      *  - HTTP_NOT_FOUND: 指定の著者が存在しなかった。
      */
-    @Put(uri = "/{id}/name")
+    @Put(uri = "/{id}")
     fun putAuthor(@PathVariable id: Long, @Body author: AuthorEntity): HttpResponse<*>
 
     /**
