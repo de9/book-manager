@@ -49,7 +49,8 @@ interface AuthorsOperation {
      * 指定した著者を更新する。
      * @param id 著者ID
      * @param author 著者
-     * @return 更新した数
+     * @return
+     *  - HTTP_OK: 更新に成功した。
      *  - HTTP_NOT_FOUND: 指定の著者が存在しなかった。
      */
     @Put(uri = "/{id}")
@@ -58,7 +59,8 @@ interface AuthorsOperation {
     /**
      * 指定した著者を削除する。
      * @param id 著者ID
-     * @return 削除した数
+     * @return
+     *  - HTTP_OK: 削除に成功した。
      *  - HTTP_NOT_FOUND: 指定の著者が存在しなかった。
      */
     @Delete(uri = "/{id}")

@@ -49,7 +49,8 @@ interface BooksOperation {
      * 指定した書籍を更新する。
      * @param id 書籍ID
      * @param book 書籍
-     * @return 更新した数
+     * @return
+     *  - HTTP_OK: 更新に成功した。
      *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
      *  - HTTP_BAD_REQUEST: 更新できない書籍を指定した。
      */
@@ -60,7 +61,8 @@ interface BooksOperation {
      * 書籍に著者を追加する。
      * @param bookId 書籍ID
      * @param authorId 著者ID
-     * @return 追加した数
+     * @return
+     *  - HTTP_OK: 追加に成功した。
      *  - HTTP_NOT_FOUND: 指定の書籍または著者が存在しなかった。
      */
     @Put(uri = "/{bookId}/authors/{authorId}")
@@ -69,7 +71,8 @@ interface BooksOperation {
     /**
      * 指定した書籍を削除する。
      * @param id 書籍ID
-     * @return 削除した数
+     * @return
+     *  - HTTP_OK: 削除に成功した。
      *  - HTTP_NOT_FOUND: 指定の書籍が存在しなかった。
      */
     @Delete(uri = "/{id}")
@@ -79,7 +82,8 @@ interface BooksOperation {
      * 書籍から著者を除く。
      * @param bookId 書籍ID
      * @param authorId 著者ID
-     * @return 削除した数
+     * @return
+     *  - HTTP_OK: 除外に成功した。
      *  - HTTP_NOT_FOUND: 指定の書籍または著者が存在しなかった。
      */
     @Delete(uri = "/{bookId}/authors/{authorId}")
